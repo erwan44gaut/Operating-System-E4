@@ -1,27 +1,25 @@
 #include "gestionFichier.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[])
 {
-    char *s;
-    
     int fd = open(argv[1], O_RDONLY);
+    char *ligne;
 
-    if (fd < 0)
+    if (fd == -1)
     {
         perror("allocation de la chaine");
         exit(1);
     }
 
-    s = litFichier(fd);
-
-    printf("Toutes les lignes : %s\n", s);
-
-    free(s);
-
+    while ((ligne = litLigne(fd)) != NULL)
+    {
+        printf("%s\n", ligne);
+        free(ligne);
+    }
+    
     return 0;
 }

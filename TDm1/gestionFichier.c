@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
 
 char* litDixCaracteres(int fd)
 {
     int nbr;
-    char* buf = malloc(11 * sizeof(char));
+    char *buf = malloc(11 * sizeof(char));
 
     if (buf == NULL)
     {
@@ -21,7 +22,7 @@ char* litDixCaracteres(int fd)
         nbr += rv;
     }
 
-    /* Fin de ligne */
+    /* Fin de la chaine de caractère */
     buf[nbr] = '\0';
 
     return buf;
@@ -29,10 +30,11 @@ char* litDixCaracteres(int fd)
 
 char* litLigne(int fd)
 {
-    int nbr;
-    int TAILLEBUF = 2000;
+    int TAILLEBUF = 1024;
     char* buf = malloc(TAILLEBUF * sizeof(char));
+    int nbr = 0;
     char c;
+    ssize_t rv;
 
     if (buf == NULL)
     {
@@ -42,8 +44,8 @@ char* litLigne(int fd)
 
     for (nbr = 0; nbr < TAILLEBUF - 1; nbr++)
     {
-        int rv = read(fd, &c, 1);
-        /* rv = 0 indicates end of file */
+        rv = read(fd, &c, 1);
+        /* rv = 0 indique la fin du fichier */
         if (rv == 0)
         {
             /* Aucun caractère lu, retourner NULL */
@@ -64,94 +66,10 @@ char* litLigne(int fd)
     return buf;
 }
 
-char* litFichier(int fd)
+void ecrireChaine(int fd, char *phrase)
 {
-    int TAILLEBUF = 100;
-    char* buf = malloc(TAILLEBUF * sizeof(char));
-    char c;
-    int size = 0;
-
-    if (buf == NULL)
-    {
-        perror("allocation de la chaine");
+    if (write(fd, phrase, strlen(phrase)) == -1) {
+        perror("Erreur lors de l'écriture dans le fichier");
         exit(1);
     }
-
-    while (1)
-    {
-        int rv = read(fd, &c, 1);
-
-        if (rv == 0 || c == '\n')
-        {
-            if (size == TAILLEBUF - 1)
-            {
-                TAILLEBUF *= 2;
-                buf = realloc(buf, TAILLEBUF * sizeof(char));
-            }
-
-            buf[size++] = '\n';
-            buf[size] = '\0';
-
-            if (rv == 0) break;
-        }
-        else
-        {
-            if (size == TAILLEBUF - 1)
-            {
-                TAILLEBUF *= 2;
-                buf = realloc(buf, TAILLEBUF * sizeof(char));
-            }
-
-            buf[size++] = c;
-        }
-    }
-
-    return buf;
-}
-
-int compteNombreLignes(int fd)
-{
-    int nbLignes = 0;
-    char* ligne = NULL;
-
-    while ((ligne = litLigne(fd)) != NULL)
-    {
-        nbLignes++;
-        free(ligne);
-    }
-
-    return nbLignes;
-}
-
-int copieFichier(const char *src, const char *dest) {
-    int fd_src, fd_dest;
-    int BUFFER_SIZE = 50;
-    char buffer[BUFFER_SIZE];
-    long int nread;
-
-    fd_src = open(fd_src, O_RDONLY);
-    if (fd_src < 0) {
-        perror("Error opening source file");
-        exit(1);
-    }
-
-    fd_dest = open(fd_dest, O_WRONLY | O_CREAT | O_TRUNC, 0700);
-    if (fd_dest < 0) {
-        perror("Error opening destination file");
-        exit(1);
-    }
-
-    /* conserver les mêmes droit lors de la copie, sinon OK */
-    while ((nread = read(fd_src, buffer, BUFFER_SIZE)) > 0)
-    {
-        if(write(fd_dest, buffer, nread) != nread){
-            perror("writing problem ");
-            exit(3);
-        }
-    }
-
-    close(fd_src);
-    close(fd_dest);
-
-    return 0;
 }

@@ -1,25 +1,31 @@
 #include "gestionFichier.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-    int s;
-    
-    int fd = open("fichierTest.txt", O_RDONLY);
+    int fd = open(argv[1], O_RDONLY);
+    int nombreDeLignes = 0;
+    char *ligne;
 
-    if (fd < 0)
+    if (fd == -1)
     {
         perror("allocation de la chaine");
         exit(1);
     }
 
-    s = compteNombreLignes(fd);
 
-    printf("Nombre de lignes : %d\n", s);
+    while ((ligne = litLigne(fd)) != NULL)
+    {
+        free(ligne);
+        nombreDeLignes++;
+    }
+
+    printf("Nombre de lignes : %d\n", nombreDeLignes);
+
+    close(fd);
 
     return 0;
 }

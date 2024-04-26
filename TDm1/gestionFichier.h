@@ -3,8 +3,6 @@
 
 char* litDixCaracteres(int);
 char* litLigne(int);
-char* litFichier(int);
-int compteNombreLignes(int);
-int copieFichier(const char *src, const char *dest);
+void ecrireChaine(int dest, char *phrase);
 
 #endif

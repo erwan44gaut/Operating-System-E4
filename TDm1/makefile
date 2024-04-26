@@ -69,14 +69,14 @@
 # 	gcc -c -Wall -ansi -pedantic gestionFichier.c
 
 ##### test3b2 #####
-test3b2 : gestionFichier.o test3b2.o
-	gcc -o test3b2 test3b2.o gestionFichier.o
+# test3b2 : gestionFichier.o test3b2.o
+# 	gcc -o test3b2 test3b2.o gestionFichier.o
 
-test3b2.o : test3b2.c gestionFichier.h
-	gcc -c -Wall -ansi -pedantic test3b2.c
+# test3b2.o : test3b2.c gestionFichier.h
+# 	gcc -c -Wall -ansi -pedantic test3b2.c
 
-gestionFichier.o : gestionFichier.c gestionFichier.h
-	gcc -c -Wall -ansi -pedantic gestionFichier.c
+# gestionFichier.o : gestionFichier.c gestionFichier.h
+# 	gcc -c -Wall -ansi -pedantic gestionFichier.c
 
 ##### test3b3 #####
 # test3b3 : gestionFichier.o test3b3.o

@@ -48,7 +48,7 @@ char* litLigne(int fd)
         /* rv = 0 indique la fin du fichier */
         if (rv == 0)
         {
-            /* Aucun caractère lu, retourner NULL */
+            /* Si aucun caractère lu */
             if (nbr == 0)
             {
                 free(buf);

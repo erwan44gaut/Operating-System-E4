@@ -1,0 +1,22 @@
+Résultat : 
+
+[erwan@archlinux TDm2]$ ./testIB3 
+PID 7459: fils
+PID 7458, PPID 2831: père
+
+[erwan@archlinux TDm2]$ ./testIB2
+PID 7565, PPID 7318: père
+
+PID 7566: fils
+
+----------------------
+
+Explication :
+
+Pour ./testIB3 :
+Le processus fils affiche "fils" avec son PID.
+Le processus père attend que le fils se termine grâce au wait(NULL), puis affiche "père" avec son PID et le PPID.
+
+Pour ./testIB2 :
+Le processus père affiche "père" avec son PID et le PPID.
+Le processus fils affiche "fils" avec son propre PID, puisque l'ordre d'exécution fait que le fils s'exécute en premier avant que le père ne termine son exécution.
